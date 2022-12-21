@@ -1,0 +1,7 @@
+POST {{host}}/api/ping
+Content-Type: application/json
+
+{
+  "pingId": 1,
+  "PingIteration": 0
+}

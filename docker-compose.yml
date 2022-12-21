@@ -1,0 +1,81 @@
+---
+version: '3.8'
+services:
+  player_one:
+    image: pingpong_player:latest
+    container_name: player_one
+    ports:
+      - "6666:80"
+    environment:
+      ServiceName: 'PlayerOne'
+      PingConfig__PingTargets__0: 'player_two'
+      PongConfig__RngSeed: 12345
+      OtelCollector: 'http://otel_collector:4317'
+    networks:
+      - shared
+    
+  player_two:
+    image: pingpong_player:latest
+    container_name: player_two
+    ports:
+      - "6667:80"
+    environment:
+      ServiceName: 'PlayerTwo'
+      PingConfig__PingTargets__0: 'player_one'
+      PongConfig__RngSeed: 67890
+      OtelCollector: 'http://otel_collector:4317'
+    networks:
+      - shared
+  
+  otel_collector:
+    image: otel/opentelemetry-collector-contrib
+    container_name: otel_collector
+    ports:
+      - "4317:4317"
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+        - ./Observability-configs/otel-collector.yml:/etc/otel-collector-config.yaml
+    networks:
+      - shared
+    depends_on:
+      - jaeger
+    
+  jaeger:
+    image: jaegertracing/all-in-one
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    networks:
+      - shared
+        
+  elastic:
+    image: elasticsearch:8.5.3
+    container_name: elastic
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./Observability-configs/elasticsearch.yaml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+    environment:
+      ES_JAVA_OPTS: "-Xmx4g -Xms4g"
+      discovery.type: single-node
+    networks:
+      - shared
+        
+  kibana:
+    image: kibana:8.5.3
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./Observability-configs/kibana.yaml:/usr/share/kibana/config/kibana.yml:ro,Z
+    networks:
+      - shared
+    depends_on:
+      - elastic
+    
+networks:
+  shared:
+    driver: bridge
+    

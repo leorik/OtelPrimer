@@ -1,0 +1,33 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        
+exporters:
+  jaeger:
+    endpoint: "jaeger:14250"
+    tls:
+      insecure: true
+
+  elasticsearch/trace:
+    endpoints: [ http://elastic:9200 ]
+    traces_index: traces-ping-pong
+  
+  elasticsearch/log:
+    endpoints: [ http://elastic:9200 ]
+    logs_index: logs-ping-pong
+    
+processors:
+  batch:
+    
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger, elasticsearch/trace]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      # exporters: [logging, otlp/elastic]
+      exporters: [elasticsearch/log]

@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+        <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.4.0-rc.1" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.4.0-rc.1" />
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs" Version="1.4.0-rc.1" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.4.0-rc.1" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.10" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.10" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\docker-compose.yml">
+        <Link>Infrastructure\docker-compose.yml</Link>
+      </Content>
+      <Content Include="..\Observability-configs\elasticsearch.yaml">
+        <Link>Observability-configs\elasticsearch.yaml</Link>
+      </Content>
+      <Content Include="..\Observability-configs\kibana.yaml">
+        <Link>Observability-configs\kibana.yaml</Link>
+      </Content>
+      <Content Include="..\Observability-configs\otel-collector.yml">
+        <Link>Observability-configs\otel-collector.yml</Link>
+      </Content>
+      <Content Include="..\Run.ps1">
+        <Link>Infrastructure\Run.ps1</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>
