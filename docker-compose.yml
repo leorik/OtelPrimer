@@ -28,7 +28,7 @@ services:
       - shared
   
   otel_collector:
-    image: otel/opentelemetry-collector-contrib
+    image: otel/opentelemetry-collector-contrib:0.74.0
     container_name: otel_collector
     ports:
       - "4317:4317"
@@ -38,43 +38,30 @@ services:
     networks:
       - shared
     depends_on:
-      - jaeger
+      - storage
     
-  jaeger:
-    image: jaegertracing/all-in-one
-    container_name: jaeger
+  storage:
+    image: clickhouse/clickhouse-server
+    container_name: storage
     ports:
-      - "16686:16686"
-    environment:
-      COLLECTOR_OTLP_ENABLED: true
-    networks:
+      - "9000:9000"
+      - "8123:8123"
+    networks: 
       - shared
         
-  elastic:
-    image: elasticsearch:8.5.3
-    container_name: elastic
-    ports:
-      - "9200:9200"
+  grafana:
+    image: grafana/grafana:9.4.3
+    container_name: grafana
     volumes:
-      - ./Observability-configs/elasticsearch.yaml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./Observability-configs/grafana.ini:/etc/grafana/grafana.ini
+      - ./Observability-configs/grafana-provisioning/:/etc/grafana/provisioning/
+    ports:
+      - "3000:3000"
+    networks: 
+      - shared
     environment:
-      ES_JAVA_OPTS: "-Xmx4g -Xms4g"
-      discovery.type: single-node
-    networks:
-      - shared
-        
-  kibana:
-    image: kibana:8.5.3
-    container_name: kibana
-    ports:
-      - "5601:5601"
-    volumes:
-      - ./Observability-configs/kibana.yaml:/usr/share/kibana/config/kibana.yml:ro,Z
-    networks:
-      - shared
-    depends_on:
-      - elastic
-    
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+
 networks:
   shared:
     driver: bridge

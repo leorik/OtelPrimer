@@ -23,11 +23,20 @@
       <Content Include="..\docker-compose.yml">
         <Link>Infrastructure\docker-compose.yml</Link>
       </Content>
-      <Content Include="..\Observability-configs\elasticsearch.yaml">
-        <Link>Observability-configs\elasticsearch.yaml</Link>
+      <Content Include="..\Observability-configs\grafana-provisioning\dashboards\general.yaml">
+        <Link>Observability-configs\grafana-provisioning\dashboards\general.yaml</Link>
       </Content>
-      <Content Include="..\Observability-configs\kibana.yaml">
-        <Link>Observability-configs\kibana.yaml</Link>
+      <Content Include="..\Observability-configs\grafana-provisioning\dashboards\general\logs.json">
+        <Link>Observability-configs\grafana-provisioning\dashboards\general\logs.json</Link>
+      </Content>
+      <Content Include="..\Observability-configs\grafana-provisioning\dashboards\general\traces.json">
+        <Link>Observability-configs\grafana-provisioning\dashboards\general\traces.json</Link>
+      </Content>
+      <Content Include="..\Observability-configs\grafana-provisioning\datasources\default.yaml">
+        <Link>Observability-configs\grafana-provisioning\datasources\default.yaml</Link>
+      </Content>
+      <Content Include="..\Observability-configs\grafana.ini">
+        <Link>Observability-configs\grafana.ini</Link>
       </Content>
       <Content Include="..\Observability-configs\otel-collector.yml">
         <Link>Observability-configs\otel-collector.yml</Link>

@@ -2,32 +2,28 @@ receivers:
   otlp:
     protocols:
       grpc:
-        
-exporters:
-  jaeger:
-    endpoint: "jaeger:14250"
-    tls:
-      insecure: true
 
-  elasticsearch/trace:
-    endpoints: [ http://elastic:9200 ]
-    traces_index: traces-ping-pong
-  
-  elasticsearch/log:
-    endpoints: [ http://elastic:9200 ]
-    logs_index: logs-ping-pong
-    
+exporters:
+  clickhouse:
+    endpoint: tcp://storage:9000?dial_timeout=10s&compress=lz4
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+
 processors:
   batch:
-    
+    timeout: 5s
+    send_batch_size: 100000
+
 service:
   pipelines:
     traces:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [jaeger, elasticsearch/trace]
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ clickhouse ]
     logs:
-      receivers: [otlp]
-      processors: [batch]
-      # exporters: [logging, otlp/elastic]
-      exporters: [elasticsearch/log]
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ clickhouse ]
