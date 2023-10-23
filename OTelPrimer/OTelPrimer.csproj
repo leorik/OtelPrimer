@@ -29,14 +29,14 @@
       <Content Include="..\Observability-configs\grafana-provisioning\dashboards\general\logs.json">
         <Link>Observability-configs\grafana-provisioning\dashboards\general\logs.json</Link>
       </Content>
-      <Content Include="..\Observability-configs\grafana-provisioning\dashboards\general\traces.json">
-        <Link>Observability-configs\grafana-provisioning\dashboards\general\traces.json</Link>
-      </Content>
       <Content Include="..\Observability-configs\grafana-provisioning\datasources\default.yaml">
         <Link>Observability-configs\grafana-provisioning\datasources\default.yaml</Link>
       </Content>
       <Content Include="..\Observability-configs\grafana.ini">
         <Link>Observability-configs\grafana.ini</Link>
+      </Content>
+      <Content Include="..\Observability-configs\jaeger-clickhouse\config.yaml">
+        <Link>Observability-configs\jaeger-clickhouse\config.yaml</Link>
       </Content>
       <Content Include="..\Observability-configs\otel-collector.yml">
         <Link>Observability-configs\otel-collector.yml</Link>

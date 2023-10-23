@@ -30,8 +30,6 @@ services:
   otel_collector:
     image: otel/opentelemetry-collector-contrib:0.74.0
     container_name: otel_collector
-    ports:
-      - "4317:4317"
     command: [ "--config=/etc/otel-collector-config.yaml" ]
     volumes:
         - ./Observability-configs/otel-collector.yml:/etc/otel-collector-config.yaml
@@ -39,16 +37,16 @@ services:
       - shared
     depends_on:
       - storage
+      - jaeger-collector
     
   storage:
     image: clickhouse/clickhouse-server
     container_name: storage
     ports:
-      - "9000:9000"
       - "8123:8123"
     networks: 
       - shared
-        
+      
   grafana:
     image: grafana/grafana:9.4.3
     container_name: grafana
@@ -57,11 +55,43 @@ services:
       - ./Observability-configs/grafana-provisioning/:/etc/grafana/provisioning/
     ports:
       - "3000:3000"
-    networks: 
+    networks:
       - shared
     environment:
       - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
-
+        
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:1.50
+    container_name: jaeger-collector
+    environment:
+      SPAN_STORAGE_TYPE: 'grpc-plugin'
+      GRPC_STORAGE_PLUGIN_BINARY: '/var/lib/jaeger-clickhouse/jaeger-clickhouse-linux-amd64'
+      GRPC_STORAGE_PLUGIN_CONFIGURATION_FILE: '/var/lib/jaeger-clickhouse/config.yaml'
+    volumes:
+      - ./Observability-configs/jaeger-clickhouse:/var/lib/jaeger-clickhouse:rx
+    networks:
+      - shared
+    depends_on:
+      storage:
+        condition: service_started
+        
+  jaeger-ui:
+    image: jaegertracing/jaeger-query:1.50
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+    environment:
+      SPAN_STORAGE_TYPE: 'grpc-plugin'
+      GRPC_STORAGE_PLUGIN_BINARY: '/var/lib/jaeger-clickhouse/jaeger-clickhouse-linux-amd64'
+      GRPC_STORAGE_PLUGIN_CONFIGURATION_FILE: '/var/lib/jaeger-clickhouse/config.yaml'
+    volumes:
+      - ./Observability-configs/jaeger-clickhouse:/var/lib/jaeger-clickhouse:rx
+    networks:
+      - shared
+    depends_on: 
+      storage:
+        condition: service_started 
+          
 networks:
   shared:
     driver: bridge
