@@ -37,7 +37,7 @@ services:
       - shared
     depends_on:
       - storage
-      - jaeger-collector
+      - jaeger_collector
     
   storage:
     image: clickhouse/clickhouse-server
@@ -51,18 +51,18 @@ services:
     image: grafana/grafana:9.4.3
     container_name: grafana
     volumes:
-      - ./Observability-configs/grafana.ini:/etc/grafana/grafana.ini
-      - ./Observability-configs/grafana-provisioning/:/etc/grafana/provisioning/
+      - ./Observability-configs/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./Observability-configs/grafana-provisioning:/etc/grafana/provisioning:ro
     ports:
       - "3000:3000"
     networks:
       - shared
     environment:
       - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
-        
-  jaeger-collector:
+  
+  jaeger_collector:
     image: jaegertracing/jaeger-collector:1.50
-    container_name: jaeger-collector
+    container_name: jaeger_collector
     environment:
       SPAN_STORAGE_TYPE: 'grpc-plugin'
       GRPC_STORAGE_PLUGIN_BINARY: '/var/lib/jaeger-clickhouse/jaeger-clickhouse-linux-amd64'
@@ -75,17 +75,20 @@ services:
       storage:
         condition: service_started
         
-  jaeger-ui:
+  jaeger:
     image: jaegertracing/jaeger-query:1.50
     container_name: jaeger
     ports:
       - "16686:16686"
+    command:
+      - "--query.ui-config=/etc/jaeger/config.json"
     environment:
       SPAN_STORAGE_TYPE: 'grpc-plugin'
       GRPC_STORAGE_PLUGIN_BINARY: '/var/lib/jaeger-clickhouse/jaeger-clickhouse-linux-amd64'
       GRPC_STORAGE_PLUGIN_CONFIGURATION_FILE: '/var/lib/jaeger-clickhouse/config.yaml'
     volumes:
       - ./Observability-configs/jaeger-clickhouse:/var/lib/jaeger-clickhouse:rx
+      - ./Observability-configs/jaeger.json:/etc/jaeger/config.json:ro
     networks:
       - shared
     depends_on: 

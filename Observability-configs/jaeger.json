@@ -1,0 +1,9 @@
+{
+  "linkPatterns": [
+    {
+      "type": "traces",
+      "url": "http://localhost:3000/grafana/d/chl1/logs?orgId=1&var-serviceName=All&var-trace_id=#{traceID}&var-level=All",
+      "text": "Logs for this trace"
+    }
+  ]
+}

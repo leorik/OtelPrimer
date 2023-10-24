@@ -1,4 +1,4 @@
-﻿{
+{
   "annotations": {
     "list": [
       {
@@ -183,7 +183,7 @@
             "mode": "list",
             "orderBy": [
               {
-                "dir": "DESC",
+                "dir": "ASC",
                 "name": "Timestamp"
               }
             ],
@@ -209,7 +209,7 @@
               "mode": "list",
               "orderBy": [
                 {
-                  "dir": "DESC",
+                  "dir": "ASC",
                   "name": "Timestamp"
                 }
               ],
@@ -217,7 +217,7 @@
             }
           },
           "queryType": "sql",
-          "rawSql": "SELECT \"Timestamp\", ServiceName as `Service`, \"SeverityText\" as `Level`, \"Body\" as `Text`, TraceId as `Trace ID` FROM \"otel_logs\" WHERE $__conditionalAll(TraceId IN (${trace_id:singlequote}),  $trace_id) AND ServiceName In (${serviceName:singlequote}) AND $__conditionalAll(SeverityText IN (${level:singlequote}),  $level) AND $__timeFilter(Timestamp) ORDER BY Timestamp DESC",
+          "rawSql": "SELECT \"Timestamp\", ServiceName as `Service`, \"SeverityText\" as `Level`, \"Body\" as `Text`, TraceId as `Trace ID` FROM \"otel_logs\" WHERE $__conditionalAll(TraceId IN (${trace_id:singlequote}),  $trace_id) AND ServiceName In (${serviceName:singlequote}) AND $__conditionalAll(SeverityText IN (${level:singlequote}),  $level) AND $__timeFilter(Timestamp) ORDER BY Timestamp ASC",
           "refId": "A",
           "selectedFormat": 4
         }
@@ -326,7 +326,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Logs",
-  "uid": "JFtB2MgIz",
+  "uid": "chl1",
   "version": 1,
   "weekStart": ""
 }
