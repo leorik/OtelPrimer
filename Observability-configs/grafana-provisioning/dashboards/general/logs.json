@@ -11,12 +11,6 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
-        "target": {
-          "limit": 100,
-          "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
-        },
         "type": "dashboard"
       }
     ]
@@ -33,229 +27,176 @@
         "type": "grafana-clickhouse-datasource",
         "uid": "clickhouse-traces"
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Timestamp"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 215
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "SeverityText"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 116
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ServiceName"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 126
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "TraceId"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 325
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Service"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 100
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Level"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 106
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Text"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 1394
-              }
-            ]
-          }
-        ]
-      },
       "gridPos": {
-        "h": 32,
+        "h": 31,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 2,
+      "id": 1,
       "options": {
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": []
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "10.2.4",
       "targets": [
         {
           "builderOptions": {
-            "fields": [
-              "Timestamp",
-              "SeverityText",
-              "Body"
+            "columns": [
+              {
+                "hint": "time",
+                "name": "Timestamp"
+              },
+              {
+                "hint": "log_message",
+                "name": "Body"
+              },
+              {
+                "hint": "log_level",
+                "name": "SeverityText"
+              },
+              {
+                "hint": "trace_id",
+                "name": "TraceId"
+              }
             ],
-            "groupBy": [
-              "machine_group",
-              "log_time"
+            "database": "default",
+            "filters": [
+              {
+                "condition": "AND",
+                "filterType": "custom",
+                "hint": "time",
+                "key": "",
+                "operator": "WITH IN DASHBOARD TIME RANGE",
+                "type": "datetime"
+              },
+              {
+                "condition": "AND",
+                "filterType": "custom",
+                "hint": "log_level",
+                "key": "",
+                "operator": "IS ANYTHING",
+                "type": "string"
+              }
             ],
-            "limit": 100,
+            "limit": 1000,
+            "meta": {
+              "logMessageLike": "",
+              "otelEnabled": false,
+              "otelVersion": "latest"
+            },
             "mode": "list",
             "orderBy": [
               {
-                "dir": "ASC",
-                "name": "Timestamp"
+                "default": true,
+                "dir": "DESC",
+                "hint": "time",
+                "name": ""
               }
             ],
+            "queryType": "logs",
             "table": "otel_logs"
           },
           "datasource": {
             "type": "grafana-clickhouse-datasource",
             "uid": "clickhouse-traces"
           },
-          "format": 1,
+          "editorType": "sql",
+          "format": 2,
           "meta": {
             "builderOptions": {
-              "fields": [
-                "Timestamp",
-                "SeverityText",
-                "Body"
+              "columns": [
+                {
+                  "hint": "time",
+                  "name": "Timestamp"
+                },
+                {
+                  "hint": "log_message",
+                  "name": "Body"
+                },
+                {
+                  "hint": "log_level",
+                  "name": "SeverityText"
+                },
+                {
+                  "hint": "trace_id",
+                  "name": "TraceId"
+                }
               ],
-              "groupBy": [
-                "machine_group",
-                "log_time"
+              "database": "default",
+              "filters": [
+                {
+                  "condition": "AND",
+                  "filterType": "custom",
+                  "hint": "time",
+                  "key": "",
+                  "operator": "WITH IN DASHBOARD TIME RANGE",
+                  "type": "datetime"
+                },
+                {
+                  "condition": "AND",
+                  "filterType": "custom",
+                  "hint": "log_level",
+                  "key": "",
+                  "operator": "IS ANYTHING",
+                  "type": "string"
+                }
               ],
-              "limit": 100,
+              "limit": 1000,
+              "meta": {
+                "logMessageLike": "",
+                "otelEnabled": false,
+                "otelVersion": "latest"
+              },
               "mode": "list",
               "orderBy": [
                 {
-                  "dir": "ASC",
-                  "name": "Timestamp"
+                  "default": true,
+                  "dir": "DESC",
+                  "hint": "time",
+                  "name": ""
                 }
               ],
+              "queryType": "logs",
               "table": "otel_logs"
             }
           },
-          "queryType": "sql",
-          "rawSql": "SELECT \"Timestamp\", ServiceName as `Service`, \"SeverityText\" as `Level`, \"Body\" as `Text`, TraceId as `Trace ID` FROM \"otel_logs\" WHERE $__conditionalAll(TraceId IN (${trace_id:singlequote}),  $trace_id) AND ServiceName In (${serviceName:singlequote}) AND $__conditionalAll(SeverityText IN (${level:singlequote}),  $level) AND $__timeFilter(Timestamp) ORDER BY Timestamp ASC",
-          "refId": "A",
-          "selectedFormat": 4
+          "pluginVersion": "4.0.2",
+          "queryType": "logs",
+          "rawSql": "SELECT\r\n    toDateTime(Timestamp), \r\n    Concat(\r\n      substring(toString(Timestamp), 1, 23), '  ', \r\n      rightPad(SeverityText, 12), \r\n      '  ', ServiceName, '  ',\r\n  if(notEmpty(TraceId), concat(TraceId, '  '), ''),\r\n      if(empty('${Body:text}'), Body, replaceRegexpAll(Body, RegEx, '<b>\\\\0\\</b>')),\r\n      if (empty(LogAttributes['Logger']), '', concat(' | Logger = ', LogAttributes['Logger']) )\r\n    ) as Body,\r\n    SeverityText as level,\r\n    concat('((?i)', if(empty('${Body:text}'),' ', \r\n      replaceAll(\r\n        replaceAll(\r\n          replaceAll(\r\n            arrayStringConcat(splitByWhitespace(${Body:sqlstring}), '|'), \r\n            ')', '\\\\)'),\r\n          '(', '\\\\('),\r\n         '[','\\\\[') \r\n        ),')') as RegEx,\r\n\t\tTraceId\r\nFROM otel_logs\r\nWHERE\r\n    ServiceName in (${ServiceName:sqlstring})\r\n    AND(SeverityText in (${Level:sqlstring}))\r\n    AND(empty('${Body:text}') OR Body ILIKE '%${Body:text}%' OR toString(default.otel_logs.LogAttributes) ILIKE '%${Body:text}%')\r\n    AND(empty('${TraceId:text}') OR TraceId ILIKE replaceAll('%${TraceId:text}%', ' ', '%') OR toString(default.otel_logs.LogAttributes) ILIKE replaceAll('%${TraceId:text}%', ' ', '%'))\r\n    AND $__timeFilter(Timestamp)\r\nORDER BY Timestamp DESC\r\nLIMIT $Limit",
+          "refId": "A"
         }
       ],
       "title": "Logs",
-      "type": "table"
+      "type": "logs"
     }
   ],
   "refresh": "",
-  "revision": 1,
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "text": "All",
+          "value": "$__all"
         },
-        "datasource": {
-          "type": "grafana-clickhouse-datasource",
-          "uid": "clickhouse-traces"
-        },
-        "definition": "SELECT DISTINCT ServiceName FROM otel_logs",
+        "definition": "select distinct ResourceAttributes['service.name'] from default.otel_logs",
         "hide": 0,
         "includeAll": true,
-        "label": "Service Name",
-        "multi": true,
-        "name": "serviceName",
+        "label": "ServiceName",
+        "multi": false,
+        "name": "ServiceName",
         "options": [],
-        "query": "SELECT DISTINCT ServiceName FROM otel_logs",
-        "refresh": 1,
+        "query": "select distinct ResourceAttributes['service.name'] from default.otel_logs",
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -264,25 +205,55 @@
       {
         "current": {
           "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "text": "100",
+          "value": "100"
         },
-        "datasource": {
-          "type": "grafana-clickhouse-datasource",
-          "uid": "clickhouse-traces"
+        "hide": 0,
+        "includeAll": false,
+        "label": "Limit",
+        "multi": false,
+        "name": "Limit",
+        "options": [
+          {
+            "selected": true,
+            "text": "100",
+            "value": "100"
+          },
+          {
+            "selected": false,
+            "text": "300",
+            "value": "300"
+          },
+          {
+            "selected": false,
+            "text": "500",
+            "value": "500"
+          },
+          {
+            "selected": false,
+            "text": "1000",
+            "value": "1000"
+          }
+        ],
+        "query": "100, 300, 500, 1000",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
         },
-        "definition": "SELECT DISTINCT TraceId FROM otel_traces WHERE ParentSpanId = '' LIMIT 100",
+        "definition": "select \ndistinct\nSeverityText\nfrom default.otel_logs\norder by SeverityNumber",
         "hide": 0,
         "includeAll": true,
-        "label": "Trace Id",
-        "multi": true,
-        "name": "trace_id",
+        "label": "Level",
+        "multi": false,
+        "name": "Level",
         "options": [],
-        "query": "SELECT DISTINCT TraceId FROM otel_traces WHERE ParentSpanId = '' LIMIT 100",
+        "query": "select \ndistinct\nSeverityText\nfrom default.otel_logs\norder by SeverityNumber",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -291,42 +262,54 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": "",
+          "value": ""
         },
-        "datasource": {
-          "type": "grafana-clickhouse-datasource",
-          "uid": "clickhouse-traces"
-        },
-        "definition": "SELECT DISTINCT SeverityText FROM otel_logs LIMIT 100",
         "hide": 0,
-        "includeAll": true,
-        "label": "Log level",
-        "multi": true,
-        "name": "level",
-        "options": [],
-        "query": "SELECT DISTINCT SeverityText FROM otel_logs LIMIT 100",
-        "refresh": 1,
-        "regex": "",
+        "label": "Body",
+        "name": "Body",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
         "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "label": "TraceId",
+        "name": "TraceId",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
       }
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Logs",
-  "uid": "chl1",
-  "version": 1,
+  "uid": "acc61412-2423-4cc0-8d35-9a3521c65958",
+  "version": 2,
   "weekStart": ""
 }
